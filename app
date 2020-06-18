@@ -1,4 +1,4 @@
-[6:12 pm, 18/06/2020] Kavya Idea No: <?php
+ <?php
 namespace App\Http\Controllers;
 
 use App\User;
@@ -62,6 +62,67 @@ class UserController extends Controller
     {
         $this->validate($request, [
            'first_name' => 'required|max:120'
+           Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::post('/signup', [
+    'uses' => 'UserController@postSignUp',
+    'as' => 'signup'
+]);
+
+Route::post('/signin', [
+    'uses' => 'UserController@postSignIn',
+    'as' => 'signin'
+]);
+
+Route::get('/logout', [
+    'uses' => 'UserController@getLogout',
+    'as' => 'logout'
+]);
+
+Route::get('/account', [
+    'uses' => 'UserController@getAccount',
+    'as' => 'account'
+]);
+
+Route::post('/upateaccount', [
+    'uses' => 'UserController@postSaveAccount',
+    'as' => 'account.save'
+]);
+
+Route::get('/userimage/{filename}', [
+    'uses' => 'UserController@getUserImage',
+    'as' => 'account.image'
+]);
+
+Route::get('/dashboard', [
+    'uses' => 'PostController@getDashboard',
+    'as' => 'dashboard',
+    'middleware' => 'auth'
+]);
+
+Route::post('/createpost', [
+    'uses' => 'PostController@postCreatePost',
+    'as' => 'post.create',
+    'middleware' => 'auth'
+]);
+
+Route::get('/delete-post/{post_id}', [
+    'uses' => 'PostController@getDeletePost',
+    'as' => 'post.delete',
+    'middleware' => 'auth'
+]);
+
+Route::post('/edit', [
+    'uses' => 'PostController@postEditPost',
+    'as' => 'edit'
+]);
+
+Route::post('/like', [
+    'uses' => 'PostController@postLikePost',
+    'as' => 'like'
+]);
         ]);
 
         $user = Auth::user();
@@ -261,3 +322,109 @@ Route::post('/like', [
     }
 
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::post('/signup', [
+    'uses' => 'UserController@postSignUp',
+    'as' => 'signup'
+]);
+
+Route::post('/signin', [
+    'uses' => 'UserController@postSignIn',
+    'as' => 'signin'
+]);
+
+Route::get('/logout', [
+    'uses' => 'UserController@getLogout',
+    'as' => 'logout'
+]);
+
+Route::get('/account', [
+    'uses' => 'UserController@getAccount',
+    'as' => 'account'
+]);
+
+Route::post('/upateaccount', [
+    'uses' => 'UserController@postSaveAccount',
+    'as' => 'account.save'
+]);
+
+Route::get('/userimage/{filename}', [
+    'uses' => 'UserController@getUserImage',
+    'as' => 'account.image'
+]);
+
+Route::get('/dashboard', [
+    'uses' => 'PostController@getDashboard',
+    'as' => 'dashboard',
+    'middleware' => 'auth'
+]);
+
+Route::post('/createpost', [
+    'uses' => 'PostController@postCreatePost',
+    'as' => 'post.create',
+    'middleware' => 'auth'
+]);
+
+Route::get('/delete-post/{post_id}', [
+    'uses' => 'PostController@getDeletePost',
+    'as' => 'post.delete',
+    'middleware' => 'auth'
+]);
+
+Route::post('/edit', [
+    'uses' => 'PostController@postEditPost',
+    'as' => 'edit'
+]);
+
+Route::post('/like', [
+    'uses' => 'PostController@postLikePost',
+    'as' => 'like'
+]);
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Routing\Router;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+
+class RouteServiceProvider extends ServiceProvider
+{
+    /**
+     * This namespace is applied to the controller routes in your routes file.
+     *
+     * In addition, it is set as the URL generator's root namespace.
+     *
+     * @var string
+     */
+    protected $namespace = 'App\Http\Controllers';
+
+    /**
+     * Define your route model bindings, pattern filters, etc.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+         public function boot(Router $router)
+    {
+        //
+
+        parent::boot($router);
+    }
+
+    /**
+     * Define the routes for the application.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    public function map(Router $router)
+    {
+        $router->group([
+            'namespace' => $this->namespace, 'middleware' => 'web',
+        ], function ($router) {
+            require app_path('Http/routes.php');
+        });
+    }}
